@@ -10,4 +10,27 @@ test("renders player information and two buttons", () => {
   expect(buttons).toHaveLength(2);
 });
 
-test("calls callbacks when increasing or decreasing score", async () => {});
+test("calls callbacks when increasing or decreasing score", async () => {
+
+    const onDecreasePlayerScore = jest.fn();
+  const onIncreasePlayerScore = jest.fn();
+
+  const user = userEvent.setup();
+
+  render(<Player />);
+
+  const decreaseButton = screen.getByRole("button", {
+    aria-label:"Decrease Score",
+  });
+  const increaseButton = screen.getByRole("button", {
+    aria-label: /increase/i,
+  });
+
+  await user.click(increaseButton);
+  await user.click(decreaseButton);
+  await user.click(increaseButton);
+
+  expect(onDecreasePlayerScore).toHaveBeenCalledTimes(1);
+  expect(onIncreasePlayerScore).toHaveBeenCalledTimes(2);
+});
+});
